@@ -1,0 +1,13 @@
+{
+  "name": "Changaza — Chip in, win together",
+  "short_name": "Changaza",
+  "description": "Transparent, blockchain-secured prediction pools you join with local mobile money, anywhere in the world.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B1210",
+  "theme_color": "#0B1210",
+  "orientation": "portrait",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

@@ -1,0 +1,103 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
+  body {
+    @apply bg-pitch-black text-chalk font-body antialiased;
+    background-image: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(212, 165, 74, 0.10), transparent),
+      radial-gradient(ellipse 60% 40% at 90% 10%, rgba(46, 92, 76, 0.18), transparent);
+    background-attachment: fixed;
+  }
+  :focus-visible {
+    outline: 2px solid #eac66b;
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* --- Signature element: the Pool Ticket --- */
+  .ticket {
+    position: relative;
+    background: linear-gradient(180deg, #152920 0%, #10201a 100%);
+    border: 1px solid theme("colors.pitch.line");
+    border-radius: 18px;
+    overflow: visible;
+  }
+
+  .ticket::before,
+  .ticket::after {
+    content: "";
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    background: #0b1210;
+    border: 1px solid theme("colors.pitch.line");
+    border-radius: 999px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+  }
+  .ticket::before {
+    left: -11px;
+  }
+  .ticket::after {
+    right: -11px;
+  }
+
+  .ticket-perf {
+    border-left: 2px dashed theme("colors.pitch.line");
+  }
+
+  .barcode {
+    display: flex;
+    align-items: stretch;
+    gap: 2px;
+    height: 28px;
+  }
+  .barcode span {
+    display: inline-block;
+    width: 2px;
+    background: #d4a54a;
+    opacity: 0.85;
+  }
+
+  .stitch-divider {
+    height: 1px;
+    background-image: repeating-linear-gradient(
+      90deg,
+      theme("colors.pitch.line") 0,
+      theme("colors.pitch.line") 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+
+  .scoreboard-num {
+    @apply font-mono tabular-nums;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .btn-primary {
+    @apply bg-gold text-pitch-black font-body font-bold rounded-xl px-5 py-3.5 transition active:scale-[0.98] hover:bg-gold-bright disabled:opacity-40 disabled:pointer-events-none;
+  }
+  .btn-secondary {
+    @apply bg-transparent border border-pitch-line text-chalk font-body font-semibold rounded-xl px-5 py-3.5 transition active:scale-[0.98] hover:border-gold-dim hover:text-gold-bright;
+  }
+  .input-field {
+    @apply w-full bg-pitch-black border border-pitch-line rounded-xl px-4 py-3.5 text-chalk placeholder:text-mute/60 outline-none focus:border-gold transition;
+  }
+}
