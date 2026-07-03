@@ -11,10 +11,10 @@ service-file swap, not a rewrite.
 
 ---
 
-## 1. What's inside
+## 1. What's inside frontend
 
 ```
-changaza/
+frontend/
 ├─ src/
 │  ├─ pages/            Landing, CreatePool, JoinPool, PoolLobby, Transparency
 │  ├─ components/       PoolTicket (signature UI), PaymentModal, Countdown, nav, etc.
