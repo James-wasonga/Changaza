@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { Info } from "lucide-react";
-import { FIXTURES } from "../data/fixtures";
+import { Info, RefreshCw, AlertTriangle } from "lucide-react";
+import { fetchUpcomingFixtures } from "../services/fixturesService";
 import { RAILS, LIVE_RAIL } from "../data/rails";
 import { createPool, joinPool } from "../services/blockchainService";
 import { useToast } from "../context/ToastContext";
@@ -20,7 +20,9 @@ export default function CreatePool() {
   const { push } = useToast();
 
   const preselected = location.state?.fixtureId;
-  const [fixtureId, setFixtureId] = useState(preselected || FIXTURES[0].id);
+  const [fixtures, setFixtures] = useState([]);
+  const [fixturesStatus, setFixturesStatus] = useState("loading"); // loading | ready | error
+  const [fixtureId, setFixtureId] = useState(preselected || null);
   const [entryAmount, setEntryAmount] = useState(100);
   const [poolType, setPoolType] = useState("winner-take-all");
   const [phone, setPhone] = useState("");
@@ -30,10 +32,32 @@ export default function CreatePool() {
   const [pendingPool, setPendingPool] = useState(null);
   const [payOpen, setPayOpen] = useState(false);
 
-  const fixture = FIXTURES.find((f) => f.id === fixtureId);
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const data = await fetchUpcomingFixtures(12);
+        if (cancelled) return;
+        setFixtures(data);
+        setFixturesStatus("ready");
+        setFixtureId((current) => current || preselected || data[0]?.id || null);
+      } catch {
+        if (!cancelled) setFixturesStatus("error");
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const fixture = fixtures.find((f) => f.id === fixtureId);
 
   async function handleSubmit(e) {
     e.preventDefault();
+    if (!fixture) {
+      push("Pick a match before opening a pool.", "error");
+      return;
+    }
     if (!phone.trim()) {
       push("Enter your phone number to fund the first entry.", "error");
       return;
@@ -80,26 +104,45 @@ export default function CreatePool() {
           <label className="block text-xs uppercase tracking-widest text-mute font-semibold mb-2">
             Match
           </label>
-          <div className="grid gap-2">
-            {FIXTURES.map((fx) => (
-              <button
-                type="button"
-                key={fx.id}
-                onClick={() => setFixtureId(fx.id)}
-                className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left transition ${
-                  fixtureId === fx.id
-                    ? "border-gold bg-gold/10"
-                    : "border-pitch-line hover:border-pitch-line/70"
-                }`}
-              >
-                <span className="flex items-center gap-2 text-sm font-semibold">
-                  <span>{fx.homeFlag}</span> {fx.home} <span className="text-mute font-normal">vs</span>{" "}
-                  {fx.away} <span>{fx.awayFlag}</span>
-                </span>
-                <span className="text-mute text-xs font-mono">{fx.stage}</span>
-              </button>
-            ))}
-          </div>
+
+          {fixturesStatus === "loading" && (
+            <div className="flex items-center gap-2 text-mute text-sm py-3">
+              <RefreshCw size={14} className="animate-spin" /> Loading live fixtures…
+            </div>
+          )}
+
+          {fixturesStatus === "error" && (
+            <div className="flex items-start gap-2.5 rounded-xl border border-coral/40 bg-coral/5 px-4 py-3">
+              <AlertTriangle size={16} className="text-coral shrink-0 mt-0.5" />
+              <p className="text-xs text-mute leading-relaxed">
+                Couldn't load the live fixture list. Check your connection and reload — pool
+                creation needs a real match to attach to.
+              </p>
+            </div>
+          )}
+
+          {fixturesStatus === "ready" && (
+            <div className="grid gap-2 max-h-72 overflow-y-auto pr-1">
+              {fixtures.map((fx) => (
+                <button
+                  type="button"
+                  key={fx.id}
+                  onClick={() => setFixtureId(fx.id)}
+                  className={`flex items-center justify-between rounded-xl border px-4 py-3 text-left transition ${
+                    fixtureId === fx.id
+                      ? "border-gold bg-gold/10"
+                      : "border-pitch-line hover:border-pitch-line/70"
+                  }`}
+                >
+                  <span className="flex items-center gap-2 text-sm font-semibold truncate">
+                    <span>{fx.homeFlag}</span> {fx.home} <span className="text-mute font-normal">vs</span>{" "}
+                    {fx.away} <span>{fx.awayFlag}</span>
+                  </span>
+                  <span className="text-mute text-xs font-mono shrink-0 pl-2">{fx.stage}</span>
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="grid grid-cols-2 gap-4">
@@ -174,7 +217,7 @@ export default function CreatePool() {
           </p>
         </div>
 
-        <button type="submit" disabled={submitting} className="btn-primary w-full">
+        <button type="submit" disabled={submitting || !fixture} className="btn-primary w-full">
           {submitting ? "Opening pool…" : `Fund entry — ${rail.currency} ${entryAmount || 0}`}
         </button>
       </form>

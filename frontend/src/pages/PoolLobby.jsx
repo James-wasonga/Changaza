@@ -152,8 +152,9 @@ export default function PoolLobby() {
             Oracle / demo control
           </p>
           <p className="text-mute text-xs mb-4 leading-relaxed">
-            In production this is triggered by a match-result oracle feeding the Soroban
-            contract. For this demo, mark the result yourself to see settlement run end to end.
+            In production, the <code className="text-gold-bright font-mono">oracle/</code>{" "}
+            settlement worker watches live match results and calls this automatically. For
+            this demo, mark the result yourself to see settlement run end to end.
           </p>
           <div className="grid grid-cols-3 gap-2">
             {RESULTS.map((r) => (
