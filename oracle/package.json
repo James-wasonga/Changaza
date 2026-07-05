@@ -1,0 +1,12 @@
+{
+  "name": "changaza-oracle",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node settleWorker.js"
+  },
+  "dependencies": {
+    "@stellar/stellar-sdk": "^12.3.0"
+  }
+}
