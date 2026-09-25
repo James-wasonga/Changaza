@@ -1,6 +1,6 @@
 # Changaza
 
-**Chip in, win together.** Prediction pools for the World Cup (and beyond), joined with
+**Chip in, win together.** The Prediction pools for the World Cup (and beyond), joined with
 local mobile money instead of a credit card or a crypto wallet. Entries are escrowed
 in a transparent smart-contract layer; payouts land back on the winner's phone.
 
