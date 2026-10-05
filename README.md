@@ -4,7 +4,7 @@
 local mobile money instead of a credit card or a crypto wallet. Entries are escrowed
 in a transparent smart-contract layer; payouts land back on the winner's phone.
 
-This is a fully working demo build: every screen, flow, and interaction works end to
+This is a fully working demo that is build: every screen, flow, and interaction works end to
 end in the browser. Payments and blockchain calls run through a simulation layer built
 to mirror the real APIs one-to-one, so plugging in live infrastructure later is a
 service-file swap, not a rewrite.

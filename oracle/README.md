@@ -83,8 +83,7 @@ production service. Specifically:
 This worker is the trust bridge between the real world and the contract: the
 contract can't know who won a football match on its own, so something has to
 tell it. Right now that "something" is one admin key backed by one data
-source. That's honest and fine for launch — but it's worth being able to say
-in a judge Q&A that you know the difference between "an oracle" and "a
+source. That's honest and fine for launch but there is a difference between "an oracle" and "a
 *decentralized* oracle" (multiple independent data sources / signers with
 disagreement resolution) and that this is deliberately the former, upgraded
 to the latter as a post-launch step, not a launch-day requirement.
