@@ -44,7 +44,7 @@ export async function createPool({ fixture, entryAmount, currency, poolType }) {
     fixture,
     entryAmount: Number(entryAmount),
     currency,
-    poolType, // 'winner-take-all' | 'split'
+    poolType, // 'winner-take-all' | 'several-split'
     createdAt: new Date().toISOString(),
     createTxHash: genTxHash(),
     participants: [],
